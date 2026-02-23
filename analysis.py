@@ -18,7 +18,7 @@ POPULATIONS = ["b_cell", "cd8_t_cell", "cd4_t_cell", "nk_cell", "monocyte"]
 
 
 def get_data_overview(db_path=DB_PATH):
-    """Part 2: Relative frequency of each cell type in each sample.
+    """Relative frequency of each cell type in each sample.
 
     Returns a DataFrame with columns:
         sample, total_count, population, count, percentage
@@ -40,7 +40,7 @@ def get_data_overview(db_path=DB_PATH):
 
 
 def get_statistical_analysis(db_path=DB_PATH):
-    """Part 3: Compare responders vs non-responders for melanoma+miraclib+PBMC.
+    """Compare responders vs non-responders for melanoma+miraclib+PBMC.
 
     Returns:
         df: DataFrame with columns (sample, subject, response, time_from_treatment_start,
@@ -121,7 +121,7 @@ def get_statistical_analysis(db_path=DB_PATH):
 
 
 def get_subset_analysis(db_path=DB_PATH):
-    """Part 4: Baseline melanoma PBMC samples treated with miraclib.
+    """Baseline melanoma PBMC samples treated with miraclib.
 
     Returns a dict with three DataFrames:
         project_counts: samples per project
@@ -183,32 +183,3 @@ def get_subset_analysis(db_path=DB_PATH):
         "response_counts": response_counts,
         "sex_counts": sex_counts,
     }
-
-
-if __name__ == "__main__":
-    # Quick test: print results when run directly
-    print("=" * 60)
-    print("Part 2: Summary Table (first 10 rows)")
-    print("=" * 60)
-    summary = get_data_overview()
-    print(summary.head(10).to_string(index=False))
-    print(f"\nTotal rows: {len(summary)}")
-
-    print("\n" + "=" * 60)
-    print("Part 3: Statistical Analysis")
-    print("=" * 60)
-    df, fig, stats_df = get_statistical_analysis()
-    print(stats_df.to_string(index=False))
-    fig.savefig("boxplots.png", dpi=150, bbox_inches="tight")
-    print("\nBoxplot saved to boxplots.png")
-
-    print("\n" + "=" * 60)
-    print("Part 4: Subset Analysis")
-    print("=" * 60)
-    results = get_subset_analysis()
-    print("\nSamples per project:")
-    print(results["project_counts"].to_string(index=False))
-    print("\nSubjects per response:")
-    print(results["response_counts"].to_string(index=False))
-    print("\nSubjects per sex:")
-    print(results["sex_counts"].to_string(index=False))

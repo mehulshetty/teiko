@@ -96,7 +96,7 @@ def load_csv(cursor, csv_path):
 
 
 def main():
-    # Remove existing DB for idempotent re-runs
+    # Remove existing DB for re-runs
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
 
@@ -108,14 +108,6 @@ def main():
     load_csv(cursor, CSV_PATH)
 
     conn.commit()
-
-    # Print summary
-    cursor.execute("SELECT COUNT(*) FROM subjects")
-    print(f"Subjects loaded: {cursor.fetchone()[0]}")
-    cursor.execute("SELECT COUNT(*) FROM samples")
-    print(f"Samples loaded: {cursor.fetchone()[0]}")
-    cursor.execute("SELECT COUNT(*) FROM cell_counts")
-    print(f"Cell count records loaded: {cursor.fetchone()[0]}")
 
     conn.close()
     print(f"\nDatabase created at {DB_PATH}")

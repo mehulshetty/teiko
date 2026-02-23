@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive Streamlit dashboard for clinical trial data analysis."""
+"""Dashboard for clinical trial data analysis."""
 
 import os
 import streamlit as st
@@ -33,7 +33,7 @@ tab1, tab2, tab3 = st.tabs([
 ])
 
 # ---------------------------------------------------------------------------
-# Tab 1: Data Overview (Part 2)
+# Tab 1: Data Overview
 # ---------------------------------------------------------------------------
 with tab1:
     st.header("Cell Population Relative Frequencies")
@@ -80,7 +80,7 @@ with tab1:
     st.caption(f"Showing {len(filtered):,} of {len(summary_df):,} rows")
 
 # ---------------------------------------------------------------------------
-# Tab 2: Statistical Analysis (Part 3)
+# Tab 2: Statistical Analysis
 # ---------------------------------------------------------------------------
 with tab2:
     st.header("Responders vs Non-Responders")
@@ -121,7 +121,7 @@ with tab2:
         st.info("No populations showed a statistically significant difference at α = 0.05.")
 
 # ---------------------------------------------------------------------------
-# Tab 3: Subset Analysis (Part 4)
+# Tab 3: Subset Analysis
 # ---------------------------------------------------------------------------
 with tab3:
     st.header("Baseline Subset Analysis")
