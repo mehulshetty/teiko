@@ -11,7 +11,7 @@ From a GitHub Codespace (or any terminal):
 ```bash
 pip install -r requirements.txt
 python load_data.py
-streamlit run dashboard.py
+python -m streamlit run dashboard.py
 ```
 
 That's it. `load_data.py` creates the SQLite database (`loblaw.db`) from the raw CSV, and the dashboard reads from it. If you're in Codespaces, Streamlit will open on port 8501 and then you should get a prompt to open it in your browser.
@@ -52,6 +52,10 @@ cell_counts (1 row per population per sample — 5 per sample)
 - **Scales naturally.** With hundreds of projects and thousands of samples, this structure stays clean. Subject-level queries (demographics, treatment arms) hit the small `subjects` table. Sample-level queries filter `samples` without touching cell data at all. The heavy `cell_counts` table is indexed on `sample` and `population`, so joins and filters stay fast. You could add new tables without touching existing ones.
 
 - **Flexible for new analytics.** The normalized structure means new analysis types don't require reshaping what's already there.
+
+## Why Mann-Whitney U?
+
+The statistical analysis compares cell population frequencies between responders and non-responders using the Mann-Whitney U test. We chose this over a standard t-test because biological cell count data tends to be skewed and isn't guaranteed to follow a normal distribution. Mann-Whitney U compares ranks rather than raw values, so it doesn't assume anything about the shape of the data. This makes it a more defensible choice when presenting findings, since you don't have to first prove your data is normally distributed. If the data does happen to be normal, a t-test would give slightly more statistical power, but Mann-Whitney U still works fine.
 
 ## Code Structure
 

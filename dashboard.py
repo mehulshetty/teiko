@@ -48,25 +48,8 @@ with tab1:
 
     summary_df = load_summary()
 
-    # Filters
-    col_filter1, col_filter2 = st.columns(2)
-    with col_filter1:
-        pop_filter = st.multiselect(
-            "Filter by population",
-            options=sorted(summary_df["population"].unique()),
-            default=sorted(summary_df["population"].unique()),
-        )
-    with col_filter2:
-        sample_search = st.text_input("Search by sample ID", placeholder="e.g. sample00001")
-
-    filtered = summary_df
-    if pop_filter:
-        filtered = filtered[filtered["population"].isin(pop_filter)]
-    if sample_search:
-        filtered = filtered[filtered["sample"].str.contains(sample_search, case=False)]
-
     st.dataframe(
-        filtered,
+        summary_df,
         width='stretch',
         height=500,
         column_config={
@@ -77,7 +60,7 @@ with tab1:
             "percentage": st.column_config.NumberColumn("Percentage (%)", format="%.2f"),
         },
     )
-    st.caption(f"Showing {len(filtered):,} of {len(summary_df):,} rows")
+    st.caption(f"{len(summary_df):,} rows")
 
 # ---------------------------------------------------------------------------
 # Tab 2: Statistical Analysis
@@ -101,15 +84,21 @@ with tab2:
 
     st.subheader("Statistical Test Results")
     display_stats = stats_results.copy()
+    display_stats["significant"] = display_stats["significant"].map({True: "Yes", False: "No"})
     display_stats.columns = ["Population", "U Statistic", "p-value", "Significant (p<0.05)"]
+
+    def highlight_significant(row):
+        if row["Significant (p<0.05)"] == "Yes":
+            return ["background-color: #d4edda; color: #155724"] * len(row)
+        return [""] * len(row)
+
+    styled = display_stats.style.apply(highlight_significant, axis=1).format(
+        {"U Statistic": "{:.1f}", "p-value": "{:.6f}"}
+    )
     st.dataframe(
-        display_stats,
+        styled,
         width='stretch',
         hide_index=True,
-        column_config={
-            "U Statistic": st.column_config.NumberColumn(format="%.1f"),
-            "p-value": st.column_config.NumberColumn(format="%.6f"),
-        },
     )
 
     sig_pops = stats_results[stats_results["significant"]]["population"].tolist()
